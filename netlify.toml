@@ -1,0 +1,25 @@
+# Deploy pelo GitHub (ou Netlify CLI): copia o site para dist/ e ativa o banco de dados (Netlify Blobs).
+# Deploy arrastando o ZIP: o site funciona direto da raiz, com dados salvos no celular.
+[build]
+  command = "mkdir -p dist && cp -r index.html manifest.webmanifest sw.js css js icons dist/"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
